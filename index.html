@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07070a">
+<meta name="description" content="CineSearch — премиальный онлайн-кинотеатр: 4K HDR, Dolby Atmos, без рекламы.">
+<title>CineSearch — Кинотеатр нового поколения</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='white'/%3E%3Cpath d='M13 10v12l9-6z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+@property --a{syntax:'<color>';inherits:true;initial-value:#10b981}
+@property --b{syntax:'<color>';inherits:true;initial-value:#047857}
+*{box-sizing:border-box;margin:0}
+:root{--bg:#07070a;--sf:#0e0e13;--bd:rgba(255,255,255,.09);--mu:rgba(255,255,255,.62);--r:20px;--e:cubic-bezier(.16,1,.3,1)}
+html{scroll-behavior:smooth;scroll-padding-top:96px;color-scheme:dark}
+body{background:var(--bg);color:#f4f4f6;font:400 16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}button,input{font:inherit;color:inherit}button{background:none;border:0;cursor:pointer}a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.g{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px}
+.d{font-family:Syne,sans-serif;letter-spacing:-.02em}
+.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}.i.f{fill:currentColor;stroke:none}
+#amb{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.26;background:radial-gradient(60% 50% at 80% 8%,var(--a),transparent),radial-gradient(50% 50% at 8% 92%,var(--b),transparent);transition:--a 1.4s ease,--b 1.4s ease}
+/* кнопки */
+.btn{height:52px;padding:0 32px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:12px;font-size:14px;font-weight:600;border:1px solid transparent;transition:transform .4s var(--e),background .3s,border-color .3s}
+.btn.sm{height:40px;padding:0 20px;font-size:13px}.btn:hover{transform:translateY(-2px)}
+.btn.p{background:#fff;color:#000}.btn.p:hover{background:#e8e8ec}
+.btn.o{background:rgba(255,255,255,.06);border-color:var(--bd)}.btn.o:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25)}
+/* шапка */
+header{position:fixed;inset:0 0 auto;z-index:40;padding-top:16px}
+.nav{height:64px;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 12px 0 24px;border-radius:999px;border:1px solid var(--bd);background:rgba(10,10,14,.4);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);transition:background .4s}
+.nav.s{background:rgba(10,10,14,.88)}
+.logo{display:flex;align-items:center;gap:12px;font:800 20px Syne,sans-serif;letter-spacing:-.02em}
+.logo i{width:32px;height:32px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center;font-style:normal;font-size:16px}
+.logo b{font-weight:700;color:rgba(255,255,255,.45)}
+.links{display:flex;gap:32px;font-size:14px;color:var(--mu)}.links a{transition:color .3s}.links a:hover{color:#fff}
+.ra{display:flex;align-items:center;gap:12px}
+.sbtn{height:40px;width:240px;padding:0 16px;display:flex;align-items:center;gap:12px;border-radius:999px;border:1px solid var(--bd);background:rgba(255,255,255,.04);color:var(--mu);font-size:13px;transition:background .3s,border-color .3s}
+.sbtn:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.22)}.sbtn .t{flex:1;text-align:left}
+kbd{font:500 11px Inter;padding:2px 8px;border:1px solid var(--bd);border-radius:6px;color:var(--mu)}
+/* hero */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;padding:144px 0 96px;overflow:hidden}.hero>.wrap{width:100%;position:relative;z-index:1}
+.bg{position:absolute;inset:0}
+.layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1.4s ease}
+.layer.on{opacity:.55;animation:kb 14s ease-out}@keyframes kb{from{transform:scale(1.08)}}
+.bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 4%,rgba(7,7,10,.72) 48%,rgba(7,7,10,.1)),linear-gradient(0deg,var(--bg),transparent 38%,rgba(7,7,10,.55))}
+.hero .g{align-items:center}.hl{grid-column:1/8}.hr{grid-column:9/13}
+.hl>*+*{margin-top:24px}.hl>.acts{margin-top:40px}.hl>.dots{margin-top:56px}
+.eb{display:inline-flex;align-items:center;gap:16px;font-size:12px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--mu)}.eb::before{content:"";width:32px;height:1px;background:currentColor}
+h1{font:800 clamp(44px,7vw,96px)/1 Syne,sans-serif;letter-spacing:-.03em;text-transform:uppercase;text-wrap:balance}
+.sub{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mu)}
+.tag{max-width:480px;font-size:18px;color:rgba(255,255,255,.78)}
+.meta{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px;color:var(--mu)}.meta span+span::before{content:"·";margin-right:16px}.rt{color:#fff;font-weight:600}
+.acts{display:flex;flex-wrap:wrap;gap:16px}
+.dots{display:flex;gap:8px}.dot{width:32px;height:16px;padding:6px 0;background:rgba(255,255,255,.22) content-box;border-radius:2px;transition:width .5s var(--e),background .4s}.dot.on{width:64px;background:#fff content-box}
+.nxh{font-size:12px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--mu);margin-bottom:16px}
+.nx{display:flex;flex-direction:column;gap:12px}
+.row{display:grid;grid-template-columns:128px 1fr auto;gap:16px;align-items:center;padding:12px;text-align:left;border:1px solid var(--bd);border-radius:var(--r);background:rgba(14,14,19,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:transform .4s var(--e),border-color .3s,background .3s}
+.row:hover{transform:translateX(-6px);border-color:rgba(255,255,255,.25);background:rgba(24,24,30,.75)}
+.row img{width:128px;height:80px;border-radius:12px;object-fit:cover}.row b{display:block;font:700 15px/1.3 Syne,sans-serif}.row small{color:var(--mu);font-size:12px}.row .rt{font-size:13px;padding-right:8px}
+/* секции */
+.sec{position:relative;z-index:1;padding:120px 0}
+.sh{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:48px}.sh .eb{margin-bottom:16px}
+h2{font:700 clamp(32px,4.5vw,56px)/1.05 Syne,sans-serif;letter-spacing:-.02em}
+.sh p{margin-top:16px;color:var(--mu);max-width:480px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{height:40px;padding:0 20px;border-radius:999px;border:1px solid var(--bd);font-size:13px;font-weight:500;color:var(--mu);transition:all .35s var(--e)}
+.chip:hover{color:#fff;border-color:rgba(255,255,255,.3)}.chip.on{background:#fff;color:#000;border-color:#fff}
+.cards{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;min-height:340px;align-content:start}
+.card{grid-column:span 4;position:relative;aspect-ratio:16/11;border-radius:var(--r);overflow:hidden;border:1px solid var(--bd);background:var(--sf);cursor:pointer;transition:transform .6s var(--e),border-color .3s,box-shadow .6s;animation:ci .7s var(--e) backwards;animation-delay:calc(var(--i)*70ms)}
+@keyframes ci{from{opacity:0;transform:translateY(20px) scale(.97)}}
+.card:hover,.card:focus-visible{transform:translateY(-6px);border-color:rgba(255,255,255,.24);box-shadow:0 28px 48px -20px rgba(0,0,0,.9)}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.78;transition:transform 1s var(--e),opacity .5s}.card:hover img{transform:scale(1.06);opacity:1}
+.card::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(7,7,10,.95),rgba(7,7,10,.05) 62%)}
+.ci{position:absolute;inset:0;z-index:1;padding:24px;display:flex;flex-direction:column;justify-content:space-between}.ct,.cb{display:flex;justify-content:space-between;align-items:flex-end;gap:16px}.ct{align-items:flex-start}
+.pill{height:28px;padding:0 12px;display:inline-flex;align-items:center;border-radius:999px;font-size:12px;font-weight:600;background:rgba(10,10,14,.55);border:1px solid var(--bd);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.cm{font-size:13px;color:var(--mu)}.cb h3{font-size:22px;line-height:1.2}
+.pp{width:48px;height:48px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center;flex:none;opacity:0;transform:scale(.7);transition:all .5s var(--e)}.card:hover .pp,.card:focus-visible .pp{opacity:1;transform:none}
+.ft{grid-column:span 4;padding:32px;border:1px solid var(--bd);border-radius:var(--r);background:var(--sf)}
+.ft b{display:block;font:700 14px Syne,sans-serif;color:var(--mu);margin-bottom:48px}.ft h3{font:700 22px/1.25 Syne,sans-serif;margin-bottom:12px}.ft p{color:var(--mu);font-size:15px}
+footer{position:relative;z-index:1;border-top:1px solid var(--bd);padding:80px 0 40px}
+.fl{display:grid;gap:12px;align-content:start;font-size:14px;color:var(--mu)}.fl a:hover{color:#fff}.fl h4{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#fff;font-weight:500;margin-bottom:8px}
+.fb{grid-column:1/7}.fb p{margin-top:16px;color:var(--mu);max-width:320px;font-size:14px}.fl{grid-column:span 2}
+.cp{margin-top:64px;padding-top:24px;border-top:1px solid var(--bd);display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;font-size:13px;color:rgba(255,255,255,.4)}
+.rv{opacity:0;transform:translateY(24px);transition:opacity .9s ease,transform .9s var(--e);transition-delay:calc(var(--d,0)*100ms)}.rv.in{opacity:1;transform:none}
+/* окна */
+.md{position:fixed;inset:0;z-index:60;display:grid;place-items:center;padding:24px;background:rgba(5,5,8,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}.md.open{opacity:1;visibility:visible}
+.md.pal{place-items:start center;padding-top:12vh}
+.pn{position:relative;z-index:1;width:100%;border-radius:24px;border:1px solid var(--bd);background:#0c0c11;box-shadow:0 40px 80px -20px #000;overflow:hidden;transform:translateY(24px) scale(.97);transition:transform .6s var(--e)}.open .pn{transform:none}
+.mh{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.xb{width:40px;height:40px;border-radius:50%;border:1px solid var(--bd);display:grid;place-items:center;flex:none;transition:background .3s}.xb:hover{background:rgba(255,255,255,.1)}
+.pi{display:flex;align-items:center;gap:16px;height:72px;padding:0 24px;border-bottom:1px solid var(--bd)}.pi input{flex:1;height:100%;background:none;border:0;outline:0;font-size:17px}.pi input::placeholder{color:rgba(255,255,255,.35)}
+.ph{padding:20px 24px 8px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mu)}
+.pls{padding:8px 12px;max-height:44vh;overflow:auto}
+.it{display:grid;grid-template-columns:72px 1fr auto;gap:16px;align-items:center;padding:12px;border-radius:14px;cursor:pointer;transition:background .2s}.it.sel{background:rgba(255,255,255,.08)}
+.it img{width:72px;height:45px;border-radius:8px;object-fit:cover}.it b{display:block;font-size:15px}.it small{color:var(--mu);font-size:12px}
+.em{padding:40px 24px;text-align:center;color:var(--mu);font-size:14px}.em b{display:block;color:#fff;font-size:16px;margin-bottom:4px}
+.pf{display:flex;justify-content:space-between;padding:16px 24px;border-top:1px solid var(--bd);font-size:12px;color:rgba(255,255,255,.4)}
+mark{background:rgba(255,255,255,.2);color:#fff;border-radius:3px;padding:0 2px}
+.au{max-width:440px;padding:32px;display:grid;gap:24px}.au h3{font:700 24px Syne,sans-serif}.au p{font-size:13px;color:var(--mu);margin-top:4px}
+.fm{display:grid;gap:16px}.fd{display:grid;gap:8px}.fd label{font-size:12px;color:var(--mu)}
+.fd input{height:48px;padding:0 16px;border-radius:12px;border:1px solid var(--bd);background:rgba(255,255,255,.04);outline:0;transition:border-color .3s,background .3s}.fd input:focus{border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.07)}
+.er{min-height:18px;font-size:12px;color:#fca5a5}.fm .btn{width:100%}
+.lk{font-size:13px;color:var(--mu);text-decoration:underline;justify-self:center}.lk:hover{color:#fff}
+.pr{text-align:center;display:none;gap:16px;justify-items:center}.pr .av{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.08);border:1px solid var(--bd);display:grid;place-items:center;font:700 28px Syne,sans-serif}
+.au.in-u .pr{display:grid}.au.in-u .fm,.au.in-u .lk{display:none}
+.vp{max-width:1040px}.vh{padding:20px 24px;border-bottom:1px solid var(--bd);background:rgba(0,0,0,.4)}.vh small{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.4)}.vh h3{font:700 20px Syne,sans-serif}.vh p{font-size:12px;color:var(--mu)}
+.vw{position:relative;aspect-ratio:16/9;background:#000}.vw video{width:100%;height:100%;object-fit:contain;cursor:pointer}
+.bf{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;opacity:0;transition:opacity .3s;font-size:14px;text-align:center;padding:24px}.bf.on{opacity:1}
+.sp{width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;animation:sp .8s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.vc{padding:16px 24px 20px;background:rgba(0,0,0,.6);display:grid;gap:16px}.vr{display:flex;justify-content:space-between;align-items:center;gap:16px}.vr>div{display:flex;align-items:center;gap:12px}
+#time{font-size:12px;color:var(--mu);font-variant-numeric:tabular-nums}
+.range{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:rgba(255,255,255,.2);cursor:pointer}.range.v{width:88px}
+.range::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.15)}.range::-moz-range-thumb{width:12px;height:12px;border:0;border-radius:50%;background:#fff}
+#ac{position:absolute;inset:-10%;width:120%;height:120%;filter:blur(40px);opacity:.55;pointer-events:none}
+/* loading */
+.loading{display:flex;align-items:center;justify-content:center;grid-column:1/-1;min-height:300px}
+.loading .sp{width:48px;height:48px}
+.load-err{grid-column:1/-1;text-align:center;padding:60px 24px;color:var(--mu)}
+.load-err b{display:block;color:#fff;font-size:18px;margin-bottom:8px}
+@media(max-width:1024px){.links{display:none}.hl{grid-column:1/-1}.hr{display:none}.sbtn{width:auto}.sbtn .t,.sbtn kbd{display:none}.sbtn{width:40px;padding:0;justify-content:center}.card{grid-column:span 6}.ft{grid-column:1/-1}.fb{grid-column:1/-1}.fl{grid-column:span 4}}
+@media(max-width:600px){.card{grid-column:1/-1}.fl{grid-column:span 6}.sec{padding:80px 0}.vp .sv{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="s" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
+<symbol id="p" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></symbol>
+<symbol id="x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="fs" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
+</defs></svg>
+<div id="amb"></div>
+
+<header><div class="wrap"><nav class="nav" id="nav" aria-label="Главное меню">
+  <a href="#top" class="logo" aria-label="CineSearch"><i>C</i><span>Cine<b>Search</b></span></a>
+  <div class="links"><a href="#catalog">Каталог</a><a href="#why">Преимущества</a><a href="#contact">Контакты</a></div>
+  <div class="ra">
+    <button class="sbtn" id="sb" aria-label="Поиск"><svg class="i"><use href="#s"/></svg><span class="t">Поиск фильмов</span><kbd>⌘K</kbd></button>
+    <button class="btn p sm" id="ab">Войти</button>
+  </div>
+</nav></div></header>
+
+<main>
+<section class="hero" id="top">
+  <div class="bg"><img class="layer" alt="" decoding="async"><img class="layer" alt="" decoding="async"></div>
+  <div class="wrap"><div class="g">
+    <div class="hl">
+      <span class="eb st" id="h-eb"></span>
+      <h1 class="st" id="h-t"></h1>
+      <p class="sub st" id="h-s"></p>
+      <p class="tag st" id="h-g"></p>
+      <div class="meta st" id="h-m"></div>
+      <div class="acts st"><button class="btn p" id="h-w"><svg class="i f"><use href="#p"/></svg>Смотреть фильм</button><button class="btn o" id="h-tr">Трейлер</button></div>
+      <div class="dots" id="dots"></div>
+    </div>
+    <aside class="hr"><div class="nxh">Далее в подборке</div><div class="nx" id="nx"></div></aside>
+  </div></div>
+</section>
+
+<section class="sec" id="catalog"><div class="wrap">
+  <div class="sh rv"><div><span class="eb">Коллекция</span><h2>Выдающиеся картины</h2><p>Фильмы с высокими оценками. Выберите жанр и начните смотреть.</p></div><div class="chips" id="chips" role="group" aria-label="Жанры"></div></div>
+  <div class="cards" id="cards" aria-live="polite"></div>
+</div></section>
+
+<section class="sec" id="why" style="padding-top:0"><div class="wrap">
+  <div class="sh rv"><div><span class="eb">Почему мы</span><h2>Кино без компромиссов</h2></div></div>
+  <div class="g">
+    <div class="ft rv"><b>01</b><h3>4K HDR и Dolby Atmos</h3><p>Максимальное качество изображения и объёмный звук на любом устройстве.</p></div>
+    <div class="ft rv" style="--d:1"><b>02</b><h3>Без рекламы</h3><p>Ничто не прерывает просмотр: только вы и фильм.</p></div>
+    <div class="ft rv" style="--d:2"><b>03</b><h3>Новинки каждую неделю</h3><p>Кураторская подборка премьер и признанной классики.</p></div>
+  </div>
+</div></section>
+</main>
+
+<footer id="contact"><div class="wrap">
+  <div class="g">
+    <div class="fb"><a href="#top" class="logo"><i>C</i><span>Cine<b>Search</b></span></a><p>Премиальный кинотеатр нового поколения. Смотрите кино в лучшем качестве.</p></div>
+    <nav class="fl"><h4>Сервис</h4><a href="#catalog">Каталог</a><a href="#why">Преимущества</a><a href="#top">Новинки</a></nav>
+    <nav class="fl"><h4>Компания</h4><a href="#contact">О нас</a><a href="#contact">Карьера</a><a href="#contact">Пресса</a></nav>
+    <nav class="fl"><h4>Поддержка</h4><a href="#contact">Помощь</a><a href="#contact">Конфиденциальность</a><a href="#contact">Условия</a></nav>
+  </div>
+  <div class="cp"><span>CineSearch © 2026</span><span>Сделано с любовью к кино</span></div>
+</div></footer>
+
+<div class="md pal" id="pal" role="dialog" aria-modal="true" aria-label="Поиск"><div class="pn" style="max-width:640px">
+  <div class="pi"><svg class="i"><use href="#s"/></svg><input id="pq" placeholder="Название, жанр или год…" autocomplete="off" aria-label="Поиск"><kbd>Esc</kbd></div>
+  <div class="ph" id="ph"></div><div class="pls" id="pls"></div>
+  <div class="pf"><span>↑ ↓ — выбор</span><span>Enter — смотреть</span></div>
+</div></div>
+
+<div class="md" id="auth" role="dialog" aria-modal="true" aria-label="Вход"><div class="pn au" id="aup">
+  <div class="mh"><div><h3 id="at">Вход в CineSearch</h3><p id="as">Войдите, чтобы сохранять избранное</p></div><button class="xb" data-close aria-label="Закрыть"><svg class="i"><use href="#x"/></svg></button></div>
+  <form class="fm" id="af" novalidate>
+    <div class="fd" id="nf" hidden><label for="an">Ваше имя</label><input id="an" placeholder="Алексей" autocomplete="name"></div>
+    <div class="fd"><label for="ae">Email</label><input id="ae" type="email" placeholder="user@cinesearch.io" autocomplete="email"></div>
+    <div class="fd"><label for="ap">Пароль</label><input id="ap" type="password" placeholder="Минимум 6 символов" autocomplete="current-password"></div>
+    <div class="er" id="er" role="alert"></div>
+    <button class="btn p" id="asb" type="submit">Войти</button>
+  </form>
+  <button class="lk" id="asw" type="button">Нет аккаунта? Зарегистрироваться</button>
+  <div class="pr"><div class="av" id="pa">U</div><div><h3 id="pn">Имя</h3><p id="pe"></p></div><button class="btn o" id="lo" style="width:100%">Выйти</button></div>
+</div></div>
+
+<div class="md" id="pm" role="dialog" aria-modal="true" aria-label="Плеер">
+  <canvas id="ac" width="32" height="18"></canvas>
+  <div class="pn vp">
+    <div class="vh mh"><div><small>Режим просмотра 4K HDR</small><h3 id="pt"></h3><p id="pmt"></p></div><button class="xb" data-close aria-label="Закрыть"><svg class="i"><use href="#x"/></svg></button></div>
+    <div class="vw"><video id="vd" crossorigin="anonymous" playsinline loop preload="none" data-src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"></video><div class="bf" id="bf"><div class="sp"></div></div></div>
+    <div class="vc"><input id="sk" class="range" type="range" min="0" max="1000" value="0" aria-label="Перемотка">
+      <div class="vr"><div><button class="btn p sm" id="pp" style="min-width:104px">Пауза</button><span id="time">0:00 / 0:00</span></div>
+      <div><button class="btn o sm" id="mu">Звук</button><input id="vl" class="range v sv" type="range" min="0" max="1" step=".05" value="1" aria-label="Громкость"><button class="btn o sm" id="fs" aria-label="На весь экран"><svg class="i"><use href="#fs"/></svg></button></div></div>
+    </div>
+  </div>
+</div>
+
+<noscript><style>.rv{opacity:1;transform:none}</style></noscript>
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+/* ---- TMDB API ---- */
+const TMDB_KEY='e1a265c9540a7704194b117e4ca0021b';
+const TMDB='https://api.themoviedb.org/3';
+const IMG='https://image.tmdb.org/t/p';
+
+const tmdb=async(path,params={})=>{
+  const u=new URL(TMDB+path);
+  u.searchParams.set('api_key',TMDB_KEY);
+  u.searchParams.set('language','ru');
+  Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,v));
+  const r=await fetch(u);
+  if(!r.ok)throw new Error(`TMDB ${r.status}`);
+  return r.json();
+};
+
+/* genre id → ambient colors */
+const genreColors={
+  28:['#dc2626','#7f1d1d'],   // Action
+  12:['#d97706','#7c2d12'],   // Adventure
+  16:['#0284c7','#1e3a8a'],   // Animation
+  35:['#7c3aed','#4c1d95'],   // Comedy
+  80:['#0f766e','#064e3b'],   // Crime
+  99:['#10b981','#065f46'],   // Documentary
+  18:['#2563eb','#1e3a8a'],   // Drama
+  10751:['#f59e0b','#92400e'],// Family
+  14:['#8b5cf6','#4c1d95'],   // Fantasy
+  36:['#b45309','#78350f'],   // History
+  27:['#be123c','#881337'],   // Horror
+  10402:['#0891b2','#0e7490'],// Music
+  9648:['#4338ca','#312e81'], // Mystery
+  10749:['#db2777','#9d174d'],// Romance
+  878:['#0ea5e9','#1e3a8a'],  // Sci-Fi
+  10770:['#65a30d','#365314'],// TV Movie
+  53:['#0284c7','#4f46e5'],   // Thriller
+  10752:['#dc2626','#7f1d1d'],// War
+  37:['#d97706','#92400e'],   // Western
+};
+const defColors=['#10b981','#047857'];
+
+const mapMovie=m=>({
+  id:m.id,
+  t:(m.title||m.name||'').toUpperCase(),
+  s:m.tagline||'',
+  g:m.overview||'',
+  y:m.release_date?(m.release_date.slice(0,4)):(m.first_air_date?m.first_air_date.slice(0,4):''),
+  r:m.vote_average?m.vote_average.toFixed(1):'—',
+  d:'',
+  ge:'',
+  tags:m.genre_ids||[],
+  img:m.backdrop_path||null,
+  poster:m.poster_path||null,
+  a:(genreColors[m.genre_ids?.[0]]||defColors)[0],
+  b:(genreColors[m.genre_ids?.[0]]||defColors)[1],
+});
+
+const pic=(m,w)=>{
+  const size=w>=600?'w500':'w185';
+  const path=m.poster||m.img;
+  return path?`${IMG}/${size}${path}`:'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 11"%3E%3C/svg%3E';
+};
+const bgUrl=m=>m.img?`${IMG}/w1280${m.img}`:(m.poster?`${IMG}/w780${m.poster}`:'');
+
+/* ---- state ---- */
+let M=[];           // hero movies
+let catalogM=[];    // catalog movies
+let genreMap={};    // id→name
+let genreList=[];   // [{id,name}]
+let curGenreId=null;// null = all
+
+const amb=$('#amb');
+const tint=m=>{amb.style.setProperty('--a',m.a);amb.style.setProperty('--b',m.b)};
+const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+/* ---- окна ---- */
+let lastF=null;
+const lock=()=>{document.documentElement.style.overflow=$$('.md.open').length?'hidden':''};
+const openM=el=>{lastF=document.activeElement;el.classList.add('open');lock();setTimeout(()=>$('input:not([hidden]),button',el)?.focus({preventScroll:true}),60)};
+const vd=$('#vd'),pm=$('#pm');
+const closeM=el=>{if(!el.classList.contains('open'))return;if(el===pm){vd.pause();document.fullscreenElement&&document.exitFullscreen()}el.classList.remove('open');lock();lastF?.focus?.({preventScroll:true})};
+$$('.md').forEach(md=>{md.addEventListener('mousedown',e=>{if(e.target===md)closeM(md)});$$('[data-close]',md).forEach(b=>b.onclick=()=>closeM(md))});
+
+/* ---- hero ---- */
+const layers=$$('.layer');let cur=0,li=0,bgT=0,timer;
+function setBg(src){if(!src)return;const t=++bgT,im=new Image();im.onload=()=>{if(t!==bgT)return;const n=layers[li^1],o=layers[li];n.src=src;n.classList.add('on');o.classList.remove('on');li^=1};im.src=src}
+
+function pick(i){
+  if(!M.length)return;
+  cur=(i+M.length)%M.length;const m=M[cur];tint(m);setBg(bgUrl(m));
+  const genreName=m.tags.length?(genreMap[m.tags[0]]||m.ge||'Кино'):m.ge||'Кино';
+  $('#h-eb').textContent=`${genreName} · ${m.y}`;
+  $('#h-t').textContent=m.t;
+  $('#h-s').textContent=m.s||genreName;
+  $('#h-g').textContent=m.g.length>180?m.g.slice(0,180)+'…':m.g;
+  $('#h-m').innerHTML=`<span class="rt">★ ${m.r} TMDB</span><span>${m.y}</span><span>${genreName}</span><span>4K HDR</span>`;
+  $('#nx').innerHTML=[1,2,3].map(k=>{const n=M[(cur+k)%M.length];const ng=n.tags.length?(genreMap[n.tags[0]]||''):''
+    ;return `<button class="row" data-i="${(cur+k)%M.length}"><img src="${pic(n,256)}" width="128" height="80" alt=""><span><b>${n.t}</b><small>${ng} · ${n.y}</small></span><span class="rt">★ ${n.r}</span></button>`}).join('');
+  $$('.dot').forEach((d,k)=>d.classList.toggle('on',k===cur));
+  if(!rm)$$('.st').forEach((el,n)=>el.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'none'}],{duration:700,delay:n*70,easing:'cubic-bezier(.16,1,.3,1)',fill:'backwards'}));
+  clearTimeout(timer);if(!rm)timer=setTimeout(auto,9000);
+}
+function auto(){($$('.md.open').length||document.hidden)?timer=setTimeout(auto,3000):pick(cur+1)}
+['#dots','#nx'].forEach(s=>$(s).addEventListener('click',e=>{const b=e.target.closest('[data-i]');if(b)pick(+b.dataset.i)}));
+$('#h-w').onclick=()=>M.length&&play(M[cur]);
+$('#h-tr').onclick=()=>M.length&&play(M[cur],1);
+
+/* ---- каталог ---- */
+function showLoading(){
+  $('#cards').innerHTML='<div class="loading"><div class="sp"></div></div>';
+}
+function showError(msg){
+  $('#cards').innerHTML=`<div class="load-err"><b>Не удалось загрузить фильмы</b>${msg}</div>`;
+}
+
+async function loadGenres(){
+  try{
+    const d=await tmdb('/genre/movie/list');
+    genreList=d.genres||[];
+    genreMap={};genreList.forEach(g=>{genreMap[g.id]=g.name});
+    // show top genres
+    const topIds=[28,878,18,35,27,53,80,10749,16,14];
+    const shown=topIds.map(id=>genreList.find(g=>g.id===id)).filter(Boolean).slice(0,8);
+    $('#chips').innerHTML=['<button class="chip on" data-g="all">Все</button>',
+      ...shown.map(g=>`<button class="chip" data-g="${g.id}">${g.name}</button>`)].join('');
+  }catch(e){
+    $('#chips').innerHTML='<button class="chip on" data-g="all">Все</button>';
+  }
+}
+
+async function loadCatalog(genreId){
+  showLoading();
+  try{
+    let data;
+    if(!genreId){
+      data=await tmdb('/movie/popular',{page:1});
+    }else{
+      data=await tmdb('/discover/movie',{with_genres:genreId,sort_by:'vote_average.desc','vote_count.gte':100,page:1});
+    }
+    catalogM=(data.results||[]).slice(0,12).map(mapMovie);
+    grid();
+  }catch(e){
+    showError('Проверьте подключение к интернету');
+  }
+}
+
+$('#chips').addEventListener('click',e=>{
+  const b=e.target.closest('[data-g]');if(!b)return;
+  curGenreId=b.dataset.g==='all'?null:+b.dataset.g;
+  $$('.chip').forEach(c=>{const on=c===b;c.classList.toggle('on',on);c.setAttribute('aria-pressed',on)});
+  loadCatalog(curGenreId);
+});
+
+function grid(){
+  $('#cards').innerHTML=catalogM.map((m,i)=>{
+    const genreName=m.tags.length?(genreMap[m.tags[0]]||'Кино'):'Кино';
+    return `<article class="card" style="--i:${i}" data-id="${m.id}" tabindex="0" role="button" aria-label="Смотреть ${m.t}"><img src="${pic(m,720)}" width="720" height="495" loading="lazy" decoding="async" alt=""><div class="ci"><div class="ct"><span class="pill">${genreName}</span><span class="pill">★ ${m.r}</span></div><div class="cb"><div><div class="cm">${m.y}</div><h3 class="d">${m.t}</h3></div><span class="pp"><svg class="i f"><use href="#p"/></svg></span></div></div></article>`;
+  }).join('');
+}
+
+const cg=$('#cards');
+cg.addEventListener('click',e=>{const c=e.target.closest('.card');if(c)play(catalogM.find(m=>m.id==c.dataset.id)||catalogM[0])});
+cg.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const c=e.target.closest('.card');if(c){e.preventDefault();play(catalogM.find(m=>m.id==c.dataset.id)||catalogM[0])}}});
+cg.addEventListener('mouseover',e=>{const c=e.target.closest('.card');if(c){const m=catalogM.find(x=>x.id==c.dataset.id);if(m)tint(m)}});
+cg.addEventListener('mouseleave',()=>M.length&&tint(M[cur]));
+
+/* ---- поиск ---- */
+let sel=0,res=[];const pq=$('#pq'),pls=$('#pls');
+let searchTimer=null;
+
+async function search(q=''){
+  q=q.trim();
+  if(!q){
+    res=catalogM.slice(0,10);sel=0;
+    $('#ph').textContent='Рекомендуем';
+    renderSearchResults(res,q);return;
+  }
+  $('#ph').textContent='Ищем…';
+  pls.innerHTML='<div class="loading" style="min-height:80px"><div class="sp" style="width:28px;height:28px"></div></div>';
+  clearTimeout(searchTimer);
+  searchTimer=setTimeout(async()=>{
+    try{
+      const d=await tmdb('/search/movie',{query:q,page:1});
+      res=(d.results||[]).slice(0,12).map(mapMovie);sel=0;
+      $('#ph').textContent=res.length?`Найдено: ${res.length}`:'Результаты';
+      renderSearchResults(res,q);
+    }catch(e){
+      pls.innerHTML='<div class="em"><b>Ошибка поиска</b>Проверьте подключение</div>';
+    }
+  },350);
+}
+
+function renderSearchResults(list,q=''){
+  const hl=t=>{const lq=q.toLowerCase();const i=q?t.toLowerCase().indexOf(lq):-1;return i<0?t:`${t.slice(0,i)}<mark>${t.slice(i,i+q.length)}</mark>${t.slice(i+q.length)}`};
+  pls.innerHTML=list.length?list.map((m,i)=>{
+    const genreName=m.tags.length?(genreMap[m.tags[0]]||'Кино'):'Кино';
+    return `<div class="it${i===0?' sel':''}" data-i="${i}"><img src="${pic(m,144)}" width="72" height="45" loading="lazy" alt=""><div><b>${hl(m.t)}</b><small>${hl(m.y)} · ${genreName}</small></div><span class="rt">★ ${m.r}</span></div>`;
+  }).join(''):`<div class="em"><b>Ничего не найдено</b>Попробуйте другое название или жанр</div>`;
+}
+
+function mark(n){sel=(n+res.length)%res.length;$$('.it',pls).forEach((el,i)=>el.classList.toggle('sel',i===sel));$('.it.sel',pls)?.scrollIntoView({block:'nearest'})}
+const openSearch=()=>{pq.value='';res=catalogM.slice(0,10);search();openM($('#pal'))};
+$('#sb').onclick=openSearch;
+pq.addEventListener('input',()=>search(pq.value));
+pq.addEventListener('keydown',e=>{if(!res.length)return;if(e.key==='ArrowDown'){e.preventDefault();mark(sel+1)}else if(e.key==='ArrowUp'){e.preventDefault();mark(sel-1)}else if(e.key==='Enter'){closeM($('#pal'));play(res[sel])}});
+pls.addEventListener('mousemove',e=>{const it=e.target.closest('.it');if(it&&+it.dataset.i!==sel)mark(+it.dataset.i)});
+pls.addEventListener('click',e=>{const it=e.target.closest('.it');if(it){closeM($('#pal'));play(res[+it.dataset.i])}});
+
+/* ---- авторизация (демо, данные только в localStorage) ---- */
+const K='cinesearch_user',st={get(){try{return JSON.parse(localStorage.getItem(K))}catch{return null}},set(v){try{localStorage.setItem(K,JSON.stringify(v))}catch{}},del(){try{localStorage.removeItem(K)}catch{}}};
+let reg=false;
+function authUI(){const u=st.get();$('#aup').classList.toggle('in-u',!!u);$('#ab').textContent=u?u.name:'Войти';if(u){$('#pn').textContent=u.name;$('#pe').textContent=u.email;$('#pa').textContent=u.name.charAt(0).toUpperCase();$('#at').textContent='Ваш профиль';$('#as').textContent='Вы вошли в аккаунт'}else setMode(reg)}
+function setMode(r){reg=r;$('#at').textContent=r?'Создать аккаунт':'Вход в CineSearch';$('#as').textContent=r?'Это займёт меньше минуты':'Войдите, чтобы сохранять избранное';$('#asb').textContent=r?'Создать аккаунт':'Войти';$('#nf').hidden=!r;$('#asw').textContent=r?'Есть аккаунт? Войти':'Нет аккаунта? Зарегистрироваться';$('#er').textContent=''}
+$('#ab').onclick=()=>{authUI();openM($('#auth'))};$('#asw').onclick=()=>setMode(!reg);
+$('#af').addEventListener('submit',e=>{e.preventDefault();const em=$('#ae').value.trim(),pw=$('#ap').value;
+  if(!/^\S+@\S+\.\S+$/.test(em))return $('#er').textContent='Введите корректный email';
+  if(pw.length<6)return $('#er').textContent='Пароль — минимум 6 символов';
+  st.set({email:em,name:reg?($('#an').value.trim()||'Киноман'):em.split('@')[0]});$('#af').reset();authUI();});
+$('#lo').onclick=()=>{st.del();authUI()};
+
+/* ---- плеер ---- */
+const ctx=$('#ac').getContext('2d'),pp=$('#pp'),sk=$('#sk'),vl=$('#vl'),bf=$('#bf');
+let raf=0,last=0,seeking=false;
+const fmt=t=>isFinite(t)?`${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`:'0:00';
+const paint=el=>{const p=(el.value-el.min)/(el.max-el.min)*100;el.style.background=`linear-gradient(90deg,#fff ${p}%,rgba(255,255,255,.2) ${p}%)`};
+function loop(t){if(vd.paused||vd.ended){raf=0;return}if(t-last>66){last=t;try{ctx.drawImage(vd,0,0,32,18)}catch{}}raf=requestAnimationFrame(loop)}
+const spin=()=>{bf.innerHTML='<div class="sp"></div>';bf.classList.add('on')};
+function play(m,trailer){
+  if(!m)return;
+  const genreName=m.tags&&m.tags.length?(genreMap[m.tags[0]]||'Кино'):'Кино';
+  $('#pt').textContent=m.t+(trailer?' — Трейлер':'');
+  $('#pmt').textContent=`${m.y} · ${genreName}${m.r&&m.r!=='—'?' · ★ '+m.r:''}`;
+  if(!vd.getAttribute('src')){vd.src=vd.dataset.src;spin()}
+  openM(pm);vd.play().catch(()=>{});
+}
+vd.addEventListener('play',()=>{pp.textContent='Пауза';raf||(raf=requestAnimationFrame(loop))});
+vd.addEventListener('pause',()=>{pp.textContent='Играть'});
+vd.addEventListener('timeupdate',()=>{if(!seeking){sk.value=vd.duration?vd.currentTime/vd.duration*1000:0;paint(sk)}$('#time').textContent=`${fmt(vd.currentTime)} / ${fmt(vd.duration)}`});
+vd.addEventListener('volumechange',()=>{$('#mu').textContent=vd.muted||!vd.volume?'Без звука':'Звук'});
+['waiting','seeking'].forEach(n=>vd.addEventListener(n,spin));
+['playing','canplay','seeked'].forEach(n=>vd.addEventListener(n,()=>bf.classList.remove('on')));
+vd.addEventListener('error',()=>{bf.innerHTML='Не удалось загрузить видео.<br>Проверьте подключение и попробуйте снова.';bf.classList.add('on');vd.removeAttribute('src')});
+const toggle=()=>vd.paused?vd.play().catch(()=>{}):vd.pause();
+pp.onclick=vd.onclick=toggle;
+sk.addEventListener('input',()=>{seeking=true;paint(sk);vd.currentTime=sk.value/1000*(vd.duration||0)});sk.addEventListener('change',()=>seeking=false);
+vl.addEventListener('input',()=>{vd.volume=vl.value;vd.muted=false;paint(vl)});
+$('#mu').onclick=()=>{vd.muted=!vd.muted};
+$('#fs').onclick=()=>document.fullscreenElement?document.exitFullscreen():pm.requestFullscreen?.();
+
+/* ---- глобальные события ---- */
+document.addEventListener('keydown',e=>{
+  if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openSearch();return}
+  const top=$$('.md.open').pop();if(!top)return;
+  if(e.key==='Escape')closeM(top);
+  else if(e.code==='Space'&&top===pm&&!/INPUT|BUTTON/.test(e.target.tagName)){e.preventDefault();toggle()}
+});
+addEventListener('scroll',()=>$('#nav').classList.toggle('s',scrollY>40),{passive:true});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+$$('.rv').forEach(el=>io.observe(el));
+paint(sk);paint(vl);authUI();
+
+/* ---- инициализация ---- */
+async function init(){
+  showLoading();
+  try{
+    const [topRated,,genres]=await Promise.all([
+      tmdb('/movie/top_rated',{page:1}),
+      loadGenres(),
+      Promise.resolve()
+    ]);
+    M=(topRated.results||[]).slice(0,6).map(mapMovie);
+    if(M.length){
+      $('#dots').innerHTML=M.map((m,i)=>`<button class="dot" data-i="${i}" aria-label="${m.t}"></button>`).join('');
+      pick(0);
+    }
+    // load popular for catalog
+    await loadCatalog(null);
+  }catch(e){
+    showError('Не удалось загрузить данные. Проверьте подключение.');
+    // fallback dots
+    $('#dots').innerHTML='';
+  }
+}
+
+init();
+</script>
+</body>
+</html>
