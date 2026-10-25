@@ -125,9 +125,8 @@ mark{background:rgba(255,255,255,.2);color:#fff;border-radius:3px;padding:0 2px}
 @media(max-width:600px){.card{grid-column:1/-1}.fl{grid-column:span 6}.sec{padding:80px 0}.vp .sv{display:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
-  <link rel="stylesheet" href="player.css">
+<link rel="stylesheet" href="player.css">
 </head>
-  <script src="player.js"></script>
 <body>
 <svg width="0" height="0" style="position:absolute"><defs>
 <symbol id="s" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></symbol>
@@ -441,7 +440,7 @@ $('#af').addEventListener('submit',e=>{e.preventDefault();const em=$('#ae').valu
   st.set({email:em,name:reg?($('#an').value.trim()||'Киноман'):em.split('@')[0]});$('#af').reset();authUI();});
 $('#lo').onclick=()=>{st.del();authUI()};
 
-/* ---- плеер ---- */
+/* ---- плеер (старый модальный; страница фильма и провайдеры — в player.js) ---- */
 const ctx=$('#ac').getContext('2d'),pp=$('#pp'),sk=$('#sk'),vl=$('#vl'),bf=$('#bf');
 let raf=0,last=0,seeking=false;
 const fmt=t=>isFinite(t)?`${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`:'0:00';
@@ -507,5 +506,7 @@ async function init(){
 
 init();
 </script>
+<!-- Страница фильма, провайдеры (Internet Archive / iframe) — ДОЛЖЕН идти после основного скрипта -->
+<script src="player.js"></script>
 </body>
 </html>
