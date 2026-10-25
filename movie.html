@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07070a">
+<title>Фильм — CineSearch</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='white'/%3E%3Cpath d='M13 10v12l9-6z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.themoviedb.org">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+@property --a{syntax:'<color>';inherits:true;initial-value:#10b981}
+@property --b{syntax:'<color>';inherits:true;initial-value:#047857}
+*{box-sizing:border-box;margin:0}
+:root{--bg:#07070a;--sf:#0e0e13;--bd:rgba(255,255,255,.09);--mu:rgba(255,255,255,.62);--r:20px;--e:cubic-bezier(.16,1,.3,1)}
+html{color-scheme:dark}
+body{position:relative;background:var(--bg);color:#f4f4f6;font:400 16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+img{display:block;max-width:100%}button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.g{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px}
+.d{font-family:Syne,sans-serif;letter-spacing:-.02em}
+#amb{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.26;background:radial-gradient(60% 50% at 80% 8%,var(--a),transparent),radial-gradient(50% 50% at 8% 92%,var(--b),transparent);transition:--a 1.4s ease,--b 1.4s ease}
+.btn{height:40px;padding:0 20px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;border:1px solid transparent;transition:transform .4s var(--e),background .3s}
+.btn:hover{transform:translateY(-2px)}.btn.p{background:#fff;color:#000}.btn.p:hover{background:#e8e8ec}
+/* шапка */
+header{position:fixed;inset:0 0 auto;z-index:40;padding-top:16px}
+.nav{height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 12px 0 24px;border-radius:999px;border:1px solid var(--bd);background:rgba(10,10,14,.88);backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%)}
+.logo{display:flex;align-items:center;gap:12px;font:800 20px Syne,sans-serif;letter-spacing:-.02em}
+.logo i{width:32px;height:32px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center;font-style:normal;font-size:16px}
+.logo b{font-weight:700;color:rgba(255,255,255,.45)}
+/* фон */
+.bk{position:absolute;inset:0 0 auto;height:72vh;z-index:0;pointer-events:none;overflow:hidden}
+.bk img{width:100%;height:100%;object-fit:cover;opacity:.35}
+.bk::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,var(--bg),transparent 75%),linear-gradient(90deg,var(--bg),transparent 65%)}
+main{position:relative;z-index:1;padding:112px 0 80px}
+.pl{grid-column:1/9;min-width:0}.ps{grid-column:9/13}
+/* переключатель источников */
+.tabs{display:inline-flex;gap:4px;padding:4px;margin-bottom:16px;max-width:100%;overflow-x:auto;border-radius:999px;border:1px solid var(--bd);background:rgba(14,14,19,.6);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.tabs button{height:36px;padding:0 18px;border-radius:999px;font-size:13px;font-weight:500;color:var(--mu);white-space:nowrap;transition:background .3s,color .3s}
+.tabs button:hover{color:#fff}.tabs button[aria-selected=true]{background:#fff;color:#000}
+/* плеер */
+.vw{position:relative;aspect-ratio:16/9;border-radius:var(--r);overflow:hidden;border:1px solid var(--bd);background:#000;box-shadow:0 40px 80px -30px #000}
+.vw iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.bf{position:absolute;inset:0;z-index:1;display:grid;place-items:center;padding:24px;text-align:center;font-size:14px;color:var(--mu);pointer-events:none}
+.bf b{display:block;color:#fff;font-size:16px;margin-bottom:4px}
+.sp{width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;animation:sp .8s linear infinite}@keyframes sp{to{transform:rotate(360deg)}}
+.note{min-height:24px;margin-top:12px;font-size:13px;color:var(--mu)}
+/* описание */
+.inf{margin-top:24px}.inf>*+*{margin-top:20px}
+h1{font:800 clamp(32px,4.5vw,56px)/1.05 Syne,sans-serif;letter-spacing:-.03em;text-transform:uppercase;text-wrap:balance}
+.sub{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mu)}
+.meta{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px;color:var(--mu)}.meta span+span::before{content:"·";margin-right:16px}.rt{color:#fff;font-weight:600}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.pill{height:28px;padding:0 12px;display:inline-flex;align-items:center;border-radius:999px;font-size:12px;font-weight:600;background:rgba(10,10,14,.55);border:1px solid var(--bd)}
+.ov{max-width:68ch;font-size:17px;color:rgba(255,255,255,.78)}
+.ps img{width:100%;aspect-ratio:2/3;object-fit:cover;border-radius:var(--r);border:1px solid var(--bd);background:var(--sf)}
+/* актёры и похожие */
+.sec{margin-top:72px}
+h2{font:700 clamp(24px,3vw,36px)/1.1 Syne,sans-serif;letter-spacing:-.02em;margin-bottom:24px}
+.rw{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:16px}
+.pc{display:grid;align-content:start;gap:8px;font-size:13px;color:var(--mu)}
+.pc img{aspect-ratio:2/3;object-fit:cover;border-radius:14px;border:1px solid var(--bd);background:var(--sf)}
+.pc b{display:block;color:#fff;font-size:14px;line-height:1.3}
+a.pc{transition:transform .4s var(--e)}a.pc:hover{transform:translateY(-4px)}
+.cp{margin-top:80px;padding-top:24px;border-top:1px solid var(--bd);font-size:13px;color:rgba(255,255,255,.4)}
+.err{min-height:50vh;display:grid;place-content:center;justify-items:center;gap:16px;text-align:center;color:var(--mu)}
+.err b{color:#fff;font:700 24px Syne,sans-serif}
+@media(max-width:1024px){.pl,.ps{grid-column:1/-1}.ps{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div id="amb"></div>
+<div class="bk"><img id="bd" alt="" decoding="async"></div>
+<header><div class="wrap"><nav class="nav" aria-label="Главное меню">
+<a href="index.html" class="logo" aria-label="CineSearch"><i>C</i><span>Cine<b>Search</b></span></a>
+<a class="btn p" href="index.html#catalog">Каталог</a>
+</nav></div></header>
+<main><div class="wrap" id="app"><div class="err"><div class="sp"></div></div></div></main>
+
+<script src="providers.js"></script>
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+const {CONFIG,PROVIDERS}=window.CineProviders;
+const IMG='https://image.tmdb.org/t/p',NOPIC='data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2 3"%3E%3C/svg%3E';
+const params=new URLSearchParams(location.search),id=+params.get('id');
+const kv=g=>({get:k=>{try{return g().getItem(k)}catch{return null}},set:(k,v)=>{try{g().setItem(k,v)}catch{}}});
+const ss=kv(()=>sessionStorage),ls=kv(()=>localStorage);
+
+const fail=t=>{$('#app').innerHTML=`<div class="err"><b>${esc(t)}</b><a class="btn p" href="index.html">Вернуться в каталог</a></div>`};
+const tint=gid=>{const h=((gid||0)*47)%360,s=$('#amb').style;s.setProperty('--a',`hsl(${h} 70% 45%)`);s.setProperty('--b',`hsl(${(h+30)%360} 70% 25%)`)};
+
+/* один запрос к TMDB: детали + актёры + похожие + видео; кэш на время сессии */
+async function load(){
+  const key='cs:m:'+id,hit=ss.get(key);
+  if(hit)return JSON.parse(hit);
+  const u=new URL('https://api.themoviedb.org/3/movie/'+id);
+  u.search=new URLSearchParams({api_key:CONFIG.TMDB_KEY,language:'ru',append_to_response:'credits,similar,videos',include_video_language:'ru,en'});
+  const r=await fetch(u);if(!r.ok)throw new Error(r.status);
+  const d=await r.json();ss.set(key,JSON.stringify(d));return d;
+}
+
+const sec=(h,items)=>items.length?`<section class="sec"><h2 class="d">${h}</h2><div class="rw">${items.join('')}</div></section>`:'';
+const person=c=>`<div class="pc"><img src="${c.profile_path?`${IMG}/w185${c.profile_path}`:NOPIC}" loading="lazy" alt=""><span><b>${esc(c.name)}</b>${esc(c.character||'')}</span></div>`;
+const film=x=>`<a class="pc" href="movie.html?id=${x.id}"><img src="${IMG}/w342${x.poster_path}" loading="lazy" alt=""><span><b>${esc(x.title)}</b>${(x.release_date||'').slice(0,4)}</span></a>`;
+
+function render(d){
+  const y=(d.release_date||'').slice(0,4),gs=d.genres||[];
+  const m={id:d.id,title:d.title,orig:d.original_title,year:+y||0,imdb_id:d.imdb_id||null,videos:d.videos?.results||[]};
+  document.title=`${d.title} — CineSearch`;tint(gs[0]?.id);
+  if(d.backdrop_path)$('#bd').src=`${IMG}/w1280${d.backdrop_path}`;
+  const cast=(d.credits?.cast||[]).slice(0,8),sim=(d.similar?.results||[]).filter(x=>x.poster_path).slice(0,6);
+  $('#app').innerHTML=`
+<div class="g">
+ <div class="pl">
+  <div class="tabs" id="tabs" role="tablist" aria-label="Источник видео"></div>
+  <div class="vw" id="vw"></div>
+  <p class="note" id="note" aria-live="polite"></p>
+  <div class="inf">
+   <h1>${esc(d.title)}</h1>
+   ${d.tagline?`<p class="sub">${esc(d.tagline)}</p>`:''}
+   <div class="meta"><span class="rt">★ ${d.vote_average?d.vote_average.toFixed(1):'—'} TMDB</span>${y?`<span>${y}</span>`:''}${d.runtime?`<span>${d.runtime} мин</span>`:''}</div>
+   <div class="tags">${gs.map(x=>`<span class="pill">${esc(x.name)}</span>`).join('')}</div>
+   <p class="ov">${esc(d.overview||'Описание пока отсутствует.')}</p>
+  </div>
+ </div>
+ ${d.poster_path?`<aside class="ps"><img src="${IMG}/w500${d.poster_path}" alt="Постер: ${esc(d.title)}"></aside>`:''}
+</div>
+${sec('В ролях',cast.map(person))}${sec('Похожие фильмы',sim.map(film))}
+<div class="cp">CineSearch © 2026</div>`;
+  tabs(m);
+}
+
+/* переключатель источников: каждый провайдер сам находит свой src */
+function tabs(m){
+  const t=$('#tabs'),vw=$('#vw'),note=$('#note');let n=0;
+  t.innerHTML=PROVIDERS.map(p=>`<button role="tab" data-k="${p.key}">${esc(p.label)}</button>`).join('');
+  const use=async k=>{
+    const p=PROVIDERS.find(x=>x.key===k)||PROVIDERS[0],my=++n;
+    $$('button',t).forEach(b=>b.setAttribute('aria-selected',b.dataset.k===p.key));
+    ls.set('cs:src',p.key);note.textContent='';
+    vw.innerHTML='<div class="bf"><div class="sp"></div></div>';
+    let r;try{r=await p.resolve(m)}catch{r={error:'Источник не отвечает. Попробуйте позже или выберите другой.'}}
+    if(my!==n)return; // пользователь уже переключился
+    if(!r||r.error){vw.innerHTML=`<div class="bf"><div><b>Здесь пока пусто</b>${esc(r?.error||'Фильм не найден в этом источнике.')}</div></div>`;return}
+    const f=document.createElement('iframe');
+    f.src=r.src;f.title=m.title;f.allowFullscreen=true;f.allow='autoplay; fullscreen; picture-in-picture; encrypted-media';
+    if(r.sandbox)f.setAttribute('sandbox',r.sandbox);
+    const slow=setTimeout(()=>{if(my===n)note.textContent='Видео грузится долго. Если не появилось — выберите другой источник.'},12000);
+    f.onload=()=>{clearTimeout(slow);$('.bf',vw)?.remove()};
+    vw.append(f);note.textContent=r.note||'';
+  };
+  t.onclick=e=>{const b=e.target.closest('[data-k]');if(b)use(b.dataset.k)};
+  use(params.get('src')||(params.get('trailer')?'trailer':ls.get('cs:src'))||PROVIDERS[0].key);
+}
+
+(async()=>{
+  if(!id)return fail('Фильм не выбран');
+  try{render(await load())}catch{fail('Не удалось загрузить фильм. Проверьте подключение.')}
+})();
+</script>
+</body>
+</html>
